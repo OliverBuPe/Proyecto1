@@ -1,0 +1,13 @@
+graph g{
+node [shape=circle];
+node [style=filled];
+node [fillcolor="#EEEEEE"];
+node [color="#EEEEEE"];
+edge [color="#31CEF0"];
+5--10;
+4--2;
+5--8;
+5--9;
+8--6;
+10--8;
+}
