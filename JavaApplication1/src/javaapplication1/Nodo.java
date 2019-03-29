@@ -1,14 +1,17 @@
-
 package javaapplication1;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class Nodo {
     private String nombre;
     private int id;
     private double x;
     private double y;
+    private boolean visitado;
+    private List<Nodo> vecinos= new ArrayList<>();    
     private ArrayList<Integer> enlaces = new ArrayList<Integer>();
- public Nodo() {
+    public Nodo() {
      this.nombre="null";
      this.id = 0;
  }
@@ -45,6 +48,12 @@ public void anadirEnlace(int j){
  public void establecerY(double y) {
      this.y = y;
  }
+ public void establecerVisitado(boolean b){
+     visitado=b;
+ }
+ public void establecerVecinos(List<Nodo> v){
+     vecinos=v;
+ }
  public String obtenerNombre() {
      return nombre;
  } 
@@ -57,9 +66,18 @@ public void anadirEnlace(int j){
   public double obtenerY(){
      return y;
  }
+ public boolean obtenerVisitado(){
+     return visitado;
+ }
+ public List<Nodo> obtenerVecinos(){
+     return vecinos;
+ }
+ public void nuevoVecino(Nodo vecino){
+   vecinos.add(vecino);
+   }
  public ArrayList<Integer> obtenerEnlaces(){
 		return enlaces;
-	}
+}
  public String toString() {    
     return (obtenerNombre());
 }
