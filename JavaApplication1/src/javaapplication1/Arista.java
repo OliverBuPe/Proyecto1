@@ -2,7 +2,7 @@ package javaapplication1;
 public class Arista {
     private Nodo A;
     private Nodo B;
-    private int peso;
+    private float peso;
     boolean dirigido;
 public Arista(){
     this.A=new Nodo();
@@ -22,7 +22,7 @@ public Arista(Nodo A,Nodo B, boolean d){
     this.peso=0;
     this.dirigido=d;
 }
-public Arista(Nodo A,Nodo B, int peso,boolean d){
+public Arista(Nodo A,Nodo B, float peso,boolean d){
     this.A=A;
     this.B=B;
     this.peso=peso;
@@ -46,10 +46,22 @@ public Nodo getB(){
     return B;
 
 }
-public String toString() {
-    
+public String toString() {    
     return (getA().obtenerNombre()).concat ("-").concat(getB().obtenerNombre());
+    
+}
+public String Impresion(){
+           return (getA().obtenerNombre()).concat ("-").concat(getB().obtenerNombre())+" "+getPeso();
+}
+public float getPeso(){
+    return peso;
+}
+public void setPeso(float p){
+    peso=p;
+
 }
 
-
 }
+    
+
+
