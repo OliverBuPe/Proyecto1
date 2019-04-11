@@ -5,14 +5,13 @@ import java.util.*;
 import java.io.*;
 import java.util.HashMap; 
 import java.util.List;
-
-
-
+import java.util.Map.Entry;
 public class grafo{
     private  ArrayList<Nodo> nodos = new ArrayList<Nodo>();
     private ArrayList<Arista> aristas = new ArrayList<Arista>();
     private ArrayList<Arista> arbol = new ArrayList<Arista>();
-    private ArrayList<Nodo> nodosArbol = new ArrayList<Nodo>();
+    private HashSet<Nodo> nodosArbol = new HashSet<Nodo>();
+     private HashMap<Nodo, HashSet<Arista>> incidencia =new HashMap<Nodo, HashSet<Arista>>();
     private HashMap<String, String> map;
     private int L;
     public static void main(String[] args) {  
@@ -165,7 +164,6 @@ public class grafo{
         return Ari;
     }
     public void ModeloErdosRenyi(int n, int m, boolean dirigido,boolean ciclo ){
-        L=0;
         HashMap<String, String> map = new HashMap<>();
         nodos.clear();
         aristas.clear();   
@@ -173,7 +171,7 @@ public class grafo{
         double num;
         int na,nb,i,j,numAristas=0;
         Arista aux;       
-        
+        int answer = rand.nextInt(10) + 1;        
         for(i=0;i<n;i++){
             nodos.add(new Nodo(Integer.toString(i+1)));          
         }      
@@ -198,15 +196,21 @@ public class grafo{
                         }
                     }
             }
-        }        
+        }    
+         EdgeValues(1,10);
         String name = "ErdosRenyi"+Integer.toString(n);
-        Graf(name);       
+        Graf(name);     
+               /*
         DFSRecursivo(nodos.get(0));
         GrafArbol("ErdosRenyiDFSRecursivo"+Integer.toString(n));
         BFS(nodos.get(0));
         GrafArbol("ErdosRenyiBFS"+Integer.toString(n));
         DFSIterativo(nodos.get(0));
-        GrafArbol("ErdosRenyiDFSIterativo"+Integer.toString(n));
+        GrafArbol("ErdosRenyiDFSIterativo"+Integer.toString(n));*/
+        
+        Dijkstra(0);
+        GrafArbol("DijkstraErdosRenyi"+Integer.toString(n));
+         
     }
     
     public void ModeloGilbert(int v,double p,boolean dirigido,boolean ciclos){
@@ -243,14 +247,18 @@ public class grafo{
                 }
             }
         }
+        EdgeValues(1,10);
         String name = "Gilbert"+Integer.toString(v);
         Graf(name);
+        /*
         DFSRecursivo(nodos.get(0));
         GrafArbol("GilbertDFSRecursivo"+Integer.toString(v));
         BFS(nodos.get(0));
         GrafArbol("GilbertBFS"+Integer.toString(v));
         DFSIterativo(nodos.get(0));
-        GrafArbol("GilbertDFSIterativo"+Integer.toString(v));
+        GrafArbol("GilbertDFSIterativo"+Integer.toString(v));*/
+        Dijkstra(0);
+        GrafArbol("DijkstraGilbert"+Integer.toString(v));
               
     }
   
@@ -310,15 +318,17 @@ public class grafo{
       }
     }         
         
-                            
+        EdgeValues(1,10);                    
         String name = "BarabasiAlbert"+Integer.toString(v);
-        Graf(name); 
+        Graf(name); /*
         DFSRecursivo(nodos.get(2));
         GrafArbol("BarabasiAlbertDFSRecursivo"+Integer.toString(v));
         BFS(nodos.get(2));
         GrafArbol("BarabasiAlbertBFS"+Integer.toString(v));
         DFSIterativo(nodos.get(2));
-        GrafArbol("BarabasiAlbertDFSIterativo"+Integer.toString(v));
+        GrafArbol("BarabasiAlbertDFSIterativo"+Integer.toString(v));*/
+        Dijkstra(0);
+        GrafArbol("DijkstraBarabasi"+Integer.toString(v));
     }
     
     public void ModeloGeografico(int num,double dis,boolean dirigido,boolean ciclo){
@@ -336,8 +346,8 @@ public class grafo{
             for(j=0;j<nodos.size();j++){
                 if(i!=j){
                     d=distancia(nodos.get(i).obtenerX(),nodos.get(i).obtenerY(),nodos.get(j).obtenerX(),nodos.get(j).obtenerY());
-                    Arista aux = new Arista(new Nodo(Integer.toString(i+1)),new Nodo(Integer.toString(j+1)),dirigido);   
-                    if(d<dis&&BuscaArista(aux,map,dirigido)){                        
+                    Arista aux = new Arista(nodos.get(i),nodos.get(j),dirigido);   
+                    if(d>dis&&BuscaArista(aux,map,dirigido)){                        
                             map.put(aux.toString(),aux.toString());
                             aristas.add(aux);
                             if(dirigido){
@@ -355,8 +365,9 @@ public class grafo{
                 }
             }
         }
+        EdgeValues(1,10);
         String name = "Geografico"+Integer.toString(num);
-        Graf(name);
+        Graf(name);/*
         DFSRecursivo(nodos.get(0));
         System.out.println("DFS Recursico");
         GrafArbol("GeograficoDFSRecursivo"+Integer.toString(num));
@@ -365,8 +376,9 @@ public class grafo{
         GrafArbol("GeograficoBFS"+Integer.toString(num));
         DFSIterativo(nodos.get(0));
          System.out.println("DFS Iterativo");
-        GrafArbol("GeograficoDFSIterativo"+Integer.toString(num));
-          
+        GrafArbol("GeograficoDFSIterativo"+Integer.toString(num));*/
+        Dijkstra(0);
+        GrafArbol("DijkstraGeografico"+Integer.toString(num));
 
     }
     public double probabilidadEnlace(Nodo nodo, int g) {
@@ -378,8 +390,7 @@ public class grafo{
         return(Math.sqrt( ((x2-x1)*(x2-x1))+ ((y2-x1)*(x2-x1)) ) );
     }
     
-    public boolean BuscaArista(Arista l,HashMap map,boolean dir){
-        
+    public boolean BuscaArista(Arista l,HashMap map,boolean dir){        
         if(dir){
             if(map.containsKey(l.toString())){
                 return false;
@@ -415,9 +426,9 @@ public class grafo{
         for(int i=0;i<nodos.size();i++){
             bw.write(nodos.get(i).obtenerNombre()+"\n");            
         }        
-        bw.write("edgedef>node1 VARCHAR, node2 VARCHAR\n");      
+        bw.write("edgedef>node1 VARCHAR,node2 VARCHAR,directed BOOLEAN, weight DOUBLE\n");      
         for(int i=0;i<aristas.size();i++){    
-             bw.write(aristas.get(i).getA().obtenerNombre()+","+aristas.get(i).getB().obtenerNombre()+"\n");      
+             bw.write(aristas.get(i).getA().obtenerNombre()+","+aristas.get(i).getB().obtenerNombre()+",true,"+aristas.get(i).getPeso()+"\n");      
         }        
         bw.flush(); }
      catch (IOException io) {
@@ -437,15 +448,22 @@ public class grafo{
     try{        
         archivo=new File(nombre);
         fw=new FileWriter(archivo);
-        bw=new BufferedWriter(fw);               
-        bw.write("nodedef>name VARCHAR\n");
-        for(int i=0;i<nodosArbol.size();i++){
-            bw.write(nodosArbol.get(i).obtenerNombre()+"\n");            
-        }
+        bw=new BufferedWriter(fw);    
         
-        bw.write("edgedef>node1 VARCHAR, node2 VARCHAR\n");      
+        bw.write("nodedef>name VARCHAR,label VARCHAR\n");
+        Iterator<Nodo> j = nodosArbol.iterator(); 
+        while (j.hasNext()){
+            Nodo nodo =j.next();
+            String n=nodo.obtenerNombre();
+            bw.write(n+","+n+"("+nodo.obtenerDistancia()+")"+"\n");
+        }
+        /*for(int i=0;i<nodosArbol.size();i++){
+            bw.write(nodosArbol.get(i).obtenerNombre()+"\n");            
+        }*/
+        
+        bw.write("edgedef>node1 VARCHAR,node2 VARCHAR,directed BOOLEAN, weight DOUBLE\n");      
         for(int i=0;i<arbol.size();i++){    
-             bw.write(arbol.get(i).getA().obtenerNombre()+","+arbol.get(i).getB().obtenerNombre()+"\n");      
+             bw.write(arbol.get(i).getA().obtenerNombre()+","+arbol.get(i).getB().obtenerNombre()+",true,"+arbol.get(i).getPeso()+"\n");      
         }        
         bw.flush(); }
      catch (IOException io)  {        
@@ -503,8 +521,8 @@ public class grafo{
 	}
 }
    public  void DFSIterativo(Nodo nodo){
-        nodosArbol.clear();
         arbol.clear();
+        int pos;
        iniciarVisitas();
        Stack<Nodo> pila=new  Stack<Nodo>();
        pila.add(nodo);
@@ -525,10 +543,142 @@ public class grafo{
                }
        }
 }
-  
-}
-    
-    
+ public void Dijkstra(int  pos){    
+     Nodo aux1=nodos.get(0);
+     arbol.clear();     
+     CrearGrafo();
+     int posicion;
+     nodos = new ArrayList<Nodo>(nodosArbol);
+     //pos =  Posicion(nodos,aux1);
+     float  inf = (float)Double.MAX_VALUE;
+     int tam = nodosArbol.size();
+     Integer[] padres = new Integer[tam];     
+     for (int i = 0; i < tam; i++) {
+          nodos.get(i).establecerDistancia(inf);
 
-    
+          padres[i] = null;
+    }
+     nodos.get(pos).establecerDistancia(0);
+     padres[pos] = pos;
+     PriorityQueue<Nodo> distPQ = new PriorityQueue<>(vertexDistanceComp);
+      for (int i = 0; i < tam; i++) {
+        distPQ.add(nodos.get(i));
+    }
+
+    while (distPQ.peek() != null) {  // se revisa que no esté vacía la cola
+      Nodo nodo = distPQ.poll(); // elemento de la cola de prioridad
+      //System.out.println("cola "+nodo+"  "+nodo.obtenerDistancia());
+      HashSet<Arista> aristas = obtenerArista(nodo);
+      //System.out.println("aristas::::");
+      for (Arista e : aristas) { 
+          float Da = e.getB().obtenerDistancia();
+          float Db = nodo.obtenerDistancia()+e.getPeso();  
+          //padres[Posicion(nodos,e.getB())]=Posicion(nodos,nodo);
+         //System.out.println("idice "+Posicion(nodos,e.getB())+" valor "+Posicion(nodos,nodo));
+         // System.out.println("a "+Da+" "+Db);
+          if (Da>Db){
+             posicion=Posicion(nodos,e.getB()) ;
+            // System.out.println("Actualiza a "+ nodos.get(posicion));
+             distPQ.add(nodos.get(posicion));
+             nodos.get(posicion).establecerDistancia(Db);       
+             padres[posicion]=Posicion(nodos,nodo);
+          }          
+      }
+    }
+    nodosArbol.clear();
+      for (int i = 0; i < tam; i++) {
+         // System.out.println(" "+i+" "+padres[i]);
+          if(padres[i]!=null){
+              if(padres[i]!=i){
+                  nodosArbol.add(nodos.get(padres[i]));
+                  nodosArbol.add(nodos.get(i));
+           //System.out.println("padres: "+padres[i]+" tam "+tam);
+                float peso = obtenerPeso(nodos.get(padres[i]),nodos.get(i));
+               Arista aux= new Arista(nodos.get(padres[i]),nodos.get(i),peso,true);
+               arbol.add(aux);}
+          }
+    }
+      
+ }
+   Comparator<Nodo> vertexDistanceComp = new Comparator<Nodo>() {
+              @Override
+              public int compare(Nodo n1, Nodo n2) {
+                  return Float.compare(n1.obtenerDistancia(), n2.obtenerDistancia());
+              }
+          };
+  public HashSet<Arista> obtenerArista(Nodo n){
+      return incidencia.get(n);
+  }
+  public void CrearGrafo(){
+      int i,j;
+      ArrayList<Nodo> nod = new ArrayList<Nodo>();
+      nodosArbol.clear();      
+      for( i=0;i<nodos.size();i++){
+          for(j=0;j<aristas.size();j++){              
+              if(aristas.get(j).getA().obtenerNombre()==nodos.get(i).obtenerNombre()||aristas.get(j).getB().obtenerNombre()==nodos.get(i).obtenerNombre()){
+                  nodosArbol.add(nodos.get(i));
+              }             
+          }  
+      }
+ nod=new ArrayList<Nodo>(nodosArbol);
+ ArrayList<HashSet<Arista>> aux = new ArrayList< HashSet<Arista>>();
+HashSet<Arista> aris = new  HashSet<Arista>();
+ for( i=0;i<nod.size();i++){
+           aris.clear();
+          for(j=0;j<aristas.size();j++){              
+              if(aristas.get(j).getA().obtenerNombre()==nod.get(i).obtenerNombre()){
+                  aris.add(aristas.get(j));
+              }
+              
+          }
+          aux.add(new  HashSet<Arista>());
+          for(Arista e:aris){
+                  aux.get(i).add(e);
+              }
+          
+         
+      }
+ 
+ for(i=0;i<nod.size();i++){
+     incidencia.put(nod.get(i),aux.get(i));
+ }
+ Iterator <Nodo> it = incidencia.keySet().iterator();
+while(it.hasNext()){
+  Nodo key = it.next();
+  System.out.println("Clave: " + key + " -> Valor: ");
+          for(Arista e:incidencia.get(key)){
+              System.out.println(e.Impresion());
+          }
+}
+}
+  public int Posicion(ArrayList<Nodo> nod,Nodo n){
+      int posicion=0;
+      for(int i=0;i<nod.size();i++){
+          if(nod.get(i)==n){
+              posicion= i;
+          }
+      }
+     return posicion;
+  }
+  public float obtenerPeso(Nodo a,Nodo b){
+      float p=0;
+      HashSet<Arista> aristas = obtenerArista(a);
+      for(Arista e:aristas){
+          if(e.getA()==a&&e.getB()==b){
+              p=e.getPeso();         
+          }
+      }
+  return p;
+  }
+  public void EdgeValues(float min,float max){
+      Random rand = new Random();
+      float num;
+      for(int i=0;i<aristas.size();i++){
+          
+          num=(float)((min+(max-min)*rand.nextDouble()));
+          aristas.get(i).setPeso(num);
+      }
+      
+  }
+}
     
