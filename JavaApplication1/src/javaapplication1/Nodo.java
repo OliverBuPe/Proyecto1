@@ -1,3 +1,4 @@
+
 package javaapplication1;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class Nodo {
     private boolean visitado;
     private List<Nodo> vecinos= new ArrayList<>();    
     private ArrayList<Integer> enlaces = new ArrayList<Integer>();
+    private float distancia;
     public Nodo() {
      this.nombre="null";
      this.id = 0;
@@ -54,6 +56,9 @@ public void anadirEnlace(int j){
  public void establecerVecinos(List<Nodo> v){
      vecinos=v;
  }
+ public void establecerDistancia(float d){
+     distancia=d;
+ }
  public String obtenerNombre() {
      return nombre;
  } 
@@ -81,5 +86,10 @@ public void anadirEnlace(int j){
  public String toString() {    
     return (obtenerNombre());
 }
+ public float obtenerDistancia(){
+     return distancia;
+ }
+ 
 }
+
 
