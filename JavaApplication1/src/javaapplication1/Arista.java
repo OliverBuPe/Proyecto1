@@ -60,6 +60,10 @@ public void setPeso(float p){
     peso=p;
 
 }
+public boolean getDir(){
+    return dirigido;
+}
+    
 
 }
     
