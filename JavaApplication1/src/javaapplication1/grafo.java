@@ -959,6 +959,9 @@ boolean Repetida(Arista a){
     }
     return false;
 }
+public boolean getDir(){
+    return dirigido;
+}
 }
     
     
