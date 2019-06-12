@@ -729,8 +729,10 @@ while(it.hasNext()){
       
   }
   public void Prim(Nodo Inicial){
+      CrearGrafo(false);   
       Queue<Arista> cola = new PriorityQueue<>(CompararPeso);
       System.out.println("Algoritmo de Prim");
+      if(conexion()==0){
       int l,w,tam2 = incidencia.size();
       int i=0;
       double costo=0;  
@@ -773,9 +775,14 @@ while(it.hasNext()){
          costo=costo+e.getPeso();
      }
      System.out.println("Costo "+costo);
+      }else{
+          System.out.println("el grafo no esta conectado");
+      }
   }
 void Kruskal(){
+    CrearGrafo(false);   
     System.out.println("Kruscal ");
+    if(conexion()==0){
     Queue<Arista> cola = new PriorityQueue<>(CompararPeso);
     int i;
     double costo=0;
@@ -817,6 +824,10 @@ void Kruskal(){
          costo=costo+e.getPeso();
      }
 System.out.println("costo: "+costo);
+    }else{
+        System.out.println("el grafo no esta conectado");
+    }
+    
 }
 boolean Comparar( ArrayList<Nodo> n1, ArrayList<Nodo> n2){
     int tam = 0;
@@ -876,7 +887,8 @@ void Union( Nodo x ,Nodo y,ArrayList<String> p  ){
 }
 void KruskalInverso(){
    System.out.println("kruskal inverso");
-   CrearGrafo(false);    
+   CrearGrafo(false);   
+   if(conexion()==0){    
    double costo=0;
     int i,a; 
     Arista aux;
@@ -909,7 +921,11 @@ void KruskalInverso(){
             //System.out.println(e1);
             costo=costo+e1.getPeso();                            
         }    
-     System.out.println("Costo: "+costo);    
+     System.out.println("Costo: "+costo); 
+   }else{
+       System.out.println("el grafo no esta conectado");
+   
+   }   
 }
 int conexion(){
     int control=0;   
@@ -959,7 +975,4 @@ boolean Repetida(Arista a){
     }
     return false;
 }
-
 }
-    
-    
